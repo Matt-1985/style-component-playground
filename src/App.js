@@ -1,4 +1,5 @@
-import styled, { keyframes } from 'styled-components/macro';
+import styled, { keyframes, ThemeProvider } from 'styled-components/macro';
+import React, { useState } from 'react';
 import GlobalStyle from './GlobalStyle';
 import logo from './logo.svg';
 
@@ -15,14 +16,14 @@ const Wrapper = styled.div`
   text-align: center;
 
   header {
-    background-color: #282c34;
+    background-color: ${(props) => props.theme.backgroundColor};
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
-    color: white;
+    color: ${(props) => props.theme.fontColor};
   }
 
   header img {
@@ -38,14 +39,34 @@ const Wrapper = styled.div`
 `;
 
 const Link = styled.a`
-  color: #61dafb;
+  color: ${(props) => props.theme.primaryColor};
 `;
 
+const dark = {
+  primaryColor: '#000000',
+  backgroundColor: '#332E33',
+  fontColor: '#332E33',
+};
+
+const pride = {
+  primaryColor: '#E21AE8',
+  backgroundColor: '#E8BF31',
+  fontColor: '#02E8BE',
+};
+
 function App() {
+  const [theme, setTheme] = useState(dark);
+
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
       <Wrapper>
+        <button
+          type="button"
+          onClick={() => setTheme(theme === dark ? pride : dark)}
+        >
+          PUSH ME
+        </button>
         <header>
           <img src={logo} alt="logo" />
           <p>
@@ -62,7 +83,7 @@ function App() {
           </Link>
         </header>
       </Wrapper>
-    </>
+    </ThemeProvider>
   );
 }
 
